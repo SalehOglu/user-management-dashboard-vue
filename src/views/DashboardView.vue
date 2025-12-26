@@ -19,6 +19,10 @@ const openUserModal = () => {
 const closeUserModal = () => {
   isModalOpen.value = false
 }
+
+const handleSearch = (event) => {
+  usersStore.setSearchQuery(event.target.value)
+}
 </script>
 
 <template>
@@ -29,8 +33,12 @@ const closeUserModal = () => {
           <h1>Global User Management</h1>
           <p>Real-time directory of all active system users</p>
         </div>
-        <button @click="usersStore.fetchUsers()" class="glass-button refresh-btn">
-          Refresh Users
+        <button
+          @click="usersStore.fetchUsers()"
+          class="glass-button refresh-btn"
+          :disabled="usersStore.loading"
+        >
+          {{ usersStore.loading ? 'Refreshing...' : 'Refresh Users' }}
         </button>
       </header>
 
@@ -40,11 +48,27 @@ const closeUserModal = () => {
             <circle cx="11" cy="11" r="8" stroke-width="2" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2" />
           </svg>
-          <input type="text" class="search-input" placeholder="Search by name..." />
+          <input
+            type="text"
+            v-model="usersStore.searchQuery"
+            @input="handleSearch"
+            class="search-input"
+            placeholder="Search by name..."
+          />
         </div>
       </div>
 
       <div class="table-container glass-panel">
+        <div v-if="usersStore.loading && usersStore.users.length === 0" class="loading-state">
+          <div class="loader"></div>
+          <p>Fetching user directory...</p>
+        </div>
+
+        <div v-else-if="usersStore.error" class="error-state">
+          <p>{{ usersStore.error }}</p>
+          <button @click="usersStore.fetchUsers()" class="glass-button">Retry</button>
+        </div>
+
         <table class="user-table">
           <thead>
             <tr>
@@ -76,6 +100,14 @@ const closeUserModal = () => {
             </tr>
           </tbody>
         </table>
+
+        <!-- Empty State -->
+        <div
+          v-if="usersStore.filteredUsers.length === 0 && !usersStore.loading"
+          class="empty-state"
+        >
+          <p>No users found matching "{{ usersStore.searchQuery }}"</p>
+        </div>
       </div>
 
       <!-- Pagination -->
@@ -124,6 +156,17 @@ const closeUserModal = () => {
   margin-bottom: 30px;
 }
 
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 25px;
+  }
+  .refresh-btn {
+    margin-left: auto;
+  }
+}
+
 .page-header h1 {
   font-size: 2.2rem;
   font-weight: 700;
@@ -148,6 +191,11 @@ const closeUserModal = () => {
   padding: 0 15px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.search-container:focus-within {
+  border-color: var(--primary-color);
 }
 
 .search-icon {

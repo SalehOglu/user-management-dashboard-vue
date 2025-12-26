@@ -1,14 +1,35 @@
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const isMenuOpen = ref(false)
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+const router = useRouter()
+</script>
+
 <template>
   <nav class="navbar glass-panel">
     <div class="nav-content">
       <div class="nav-logo">
         <span class="logo-text">Quantum</span>
       </div>
-      <div class="nav-links">
-        <a href="./dashboard" class="nav-link">Dashboard</a>
-        <a href="./profile" class="nav-link">Profile</a>
+
+      <button class="menu-btn" @click="toggleMenu">☰</button>
+
+      <div class="nav-links" :class="{ open: isMenuOpen }">
+        <div class="mobile-actions">
+          <span class="user-greeting">Hi, User</span>
+        </div>
+
+        <router-link to="./dashboard" class="nav-link" active-class="active">Dashboard</router-link>
+        <router-link to="./profile" class="nav-link" active-class="active">Profile</router-link>
+        <button class="logout-btn mob">Logout</button>
       </div>
-      <div class="nav-actions">
+
+      <div class="nav-actions desktop">
         <span class="user-greeting">Hi, User</span>
         <button class="logout-btn">Logout</button>
       </div>
@@ -17,6 +38,7 @@
 </template>
 
 <style scoped>
+/* ---------- NAVBAR BASE ---------- */
 .navbar {
   position: fixed;
   top: 15px;
@@ -30,6 +52,7 @@
   border-radius: 12px;
 }
 
+/* ---------- NAV CONTENT ---------- */
 .nav-content {
   display: flex;
   width: 100%;
@@ -37,6 +60,7 @@
   align-items: center;
 }
 
+/* ---------- LOGO ---------- */
 .logo-text {
   font-weight: 800;
   letter-spacing: 2px;
@@ -45,11 +69,19 @@
   -webkit-text-fill-color: transparent;
   font-size: 1.2rem;
   text-transform: uppercase;
+  user-select: none;
 }
 
+/* ---------- NAV LINKS ---------- */
 .nav-links {
   display: flex;
   gap: 20px;
+}
+
+.nav-links.open {
+  background: #000;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .nav-link {
@@ -71,6 +103,7 @@
   background: rgba(102, 126, 234, 0.2);
 }
 
+/* ---------- NAV ACTIONS ---------- */
 .nav-actions {
   display: flex;
   align-items: center;
@@ -95,5 +128,86 @@
 .logout-btn:hover {
   background: var(--error-color);
   border-color: var(--error-color);
+}
+.logout-btn.mob {
+  display: none;
+}
+
+/* ---------- MOBILE ACTIONS ---------- */
+.mobile-actions {
+  display: none;
+}
+
+/* ---------- HAMBURGER BUTTON ---------- */
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+/* ---------- MEDIA QUERIES ---------- */
+@media (max-width: 768px) {
+  /* Navbar adjustments */
+  .navbar {
+    height: auto;
+    padding: 10px 16px;
+  }
+
+  /* Hamburger button */
+  .menu-btn {
+    display: block;
+  }
+
+  /* Mobile nav links */
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    right: 20px;
+
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 20px;
+    border-radius: 12px;
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: 0.25s ease;
+  }
+
+  .nav-links.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    max-width: 200px;
+    margin-left: auto;
+    gap: 0;
+  }
+
+  /* Hide desktop-only actions */
+  .nav-actions.desktop {
+    display: none;
+  }
+
+  .logout-btn.mob {
+    display: block;
+  }
+  /* Show mobile actions */
+  .mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .user-greeting {
+    text-align: center;
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+  }
 }
 </style>
