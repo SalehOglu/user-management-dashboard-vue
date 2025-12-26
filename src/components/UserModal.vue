@@ -116,4 +116,14 @@ const emit = defineEmits(['closeUserModal'])
   color: var(--text-secondary);
   margin-bottom: 5px;
 }
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 20px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
