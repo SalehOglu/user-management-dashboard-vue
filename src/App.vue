@@ -1,7 +1,10 @@
-<script setup></script>
+<script setup>
+import Navbar from './components/NavbarCom.vue'
+</script>
 
 <template>
   <div class="app-container">
+    <Navbar v-if="$route.name !== 'login'" />
     <transition name="fade" mode="out-in">
       <router-view v-slot="{ Component }">
         <main :class="{ 'with-navbar': $route.name !== 'login' }">
