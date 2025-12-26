@@ -15,6 +15,7 @@
 <style>
 .app-container {
   min-height: 100vh;
+  padding-bottom: 40px;
 }
 
 main.with-navbar {
