@@ -3,6 +3,9 @@ defineProps({
   isModalOpen: {
     type: Boolean,
   },
+  selectedUser: {
+    type: [Object, Boolean],
+  },
 })
 const emit = defineEmits(['closeUserModal'])
 </script>
@@ -11,33 +14,33 @@ const emit = defineEmits(['closeUserModal'])
   <div class="modal-overlay">
     <div class="modal-content glass-panel fade-in">
       <button class="close-btn" @click="emit('closeUserModal')">&times;</button>
-      <div class="modal-header">
+      <div class="modal-header" v-if="selectedUser">
         <div>
-          <img src="@/assets/avatar.png" class="modal-avatar" />
+          <img :src="selectedUser.picture.large" class="modal-avatar" />
         </div>
-        <h2>User name</h2>
-        <p class="modal-role">Frontend developer</p>
+        <h2>{{ selectedUser.name.first }} {{ selectedUser.name.last }}</h2>
+        <p class="modal-role">System Administrator</p>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" v-if="selectedUser">
         <div class="info-grid">
           <div class="info-item">
             <label>Email</label>
-            <p>test@example.com</p>
+            <p>{{ selectedUser.email }}</p>
           </div>
 
           <div class="info-item">
             <label>Phone</label>
-            <p>123456789</p>
+            <p>{{ selectedUser.phone }}</p>
           </div>
 
           <div class="info-item">
             <label>Address</label>
-            <p>Cairo</p>
+            <p>{{ selectedUser.location.city }}</p>
           </div>
 
           <div class="info-item">
             <label>Country</label>
-            <p>Egypt</p>
+            <p>{{ selectedUser.location.country }}</p>
           </div>
         </div>
       </div>

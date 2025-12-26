@@ -12,12 +12,15 @@ onMounted(() => {
 })
 
 const isModalOpen = ref(false)
+const selecterUser = ref(null)
 
-const openUserModal = () => {
+const openUserModal = (user) => {
   isModalOpen.value = true
+  selecterUser.value = user
 }
 const closeUserModal = () => {
   isModalOpen.value = false
+  selecterUser.value = null
 }
 
 const handleSearch = (event) => {
@@ -95,7 +98,7 @@ const handleSearch = (event) => {
                 </div>
               </td>
               <td>
-                <button class="view-btn" @click="openUserModal">View Details</button>
+                <button class="view-btn" @click="openUserModal(user)">View Details</button>
               </td>
             </tr>
           </tbody>
@@ -135,6 +138,7 @@ const handleSearch = (event) => {
     <div v-if="isModalOpen">
       <user-modal
         :isModalOpen="isModalOpen"
+        :selectedUser="selecterUser"
         @closeUserModal="closeUserModal"
         @click.self="closeUserModal"
       />

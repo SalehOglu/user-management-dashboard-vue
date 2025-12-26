@@ -8,6 +8,10 @@ const toggleMenu = () => {
 }
 
 const router = useRouter()
+const handleLogout = () => {
+  // Add your logout logic here (e.g., clearing tokens, user data, etc.)
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -26,12 +30,12 @@ const router = useRouter()
 
         <router-link to="./dashboard" class="nav-link" active-class="active">Dashboard</router-link>
         <router-link to="./profile" class="nav-link" active-class="active">Profile</router-link>
-        <button class="logout-btn mob">Logout</button>
+        <button class="logout-btn mob" @click="handleLogout">Logout</button>
       </div>
 
       <div class="nav-actions desktop">
         <span class="user-greeting">Hi, User</span>
-        <button class="logout-btn">Logout</button>
+        <button class="logout-btn" @click="handleLogout">Logout</button>
       </div>
     </div>
   </nav>
