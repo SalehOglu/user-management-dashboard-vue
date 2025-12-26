@@ -1,3 +1,16 @@
+<script setup>
+import { ref } from 'vue'
+import UserModal from '../components/UserModal.vue'
+const isModalOpen = ref(false)
+
+const openUserModal = () => {
+  isModalOpen.value = true
+}
+const closeUserModal = () => {
+  isModalOpen.value = false
+}
+</script>
+
 <template>
   <div class="dashboard-page fade-in">
     <div class="container">
@@ -43,21 +56,7 @@
               <td>Cairo</td>
               <td>Egypt</td>
               <td>
-                <button class="view-btn">View Details</button>
-              </td>
-            </tr>
-            <tr class="user-row">
-              <td>
-                <img src="../assets/avatar.png" alt="User Avatar" class="user-avatar" />
-              </td>
-              <td>
-                <div class="name-cell">Zairo</div>
-              </td>
-              <td>test@gmail.com</td>
-              <td>Cairo</td>
-              <td>Egypt</td>
-              <td>
-                <button class="view-btn">View Details</button>
+                <button class="view-btn" @click="openUserModal">View Details</button>
               </td>
             </tr>
           </tbody>
@@ -69,6 +68,14 @@
         <span class="page-info">Page 1 of 5</span>
         <button class="page-btn">Next</button>
       </div>
+    </div>
+
+    <div v-if="isModalOpen">
+      <user-modal
+        :isModalOpen="isModalOpen"
+        @closeUserModal="closeUserModal"
+        @click.self="closeUserModal"
+      />
     </div>
   </div>
 </template>
@@ -179,19 +186,6 @@
   color: var(--text-secondary);
 }
 
-.status-badge {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.status-badge.active {
-  background: rgba(76, 175, 80, 0.2);
-  color: #81c784;
-}
-
 .view-btn {
   background: transparent;
   color: var(--primary-color);
@@ -258,63 +252,5 @@
 
 .page-btn:not(:disabled):hover {
   border-color: var(--primary-color);
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.modal-content {
-  width: 100%;
-  max-width: 500px;
-  padding: 40px;
-  position: relative;
-}
-
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 2rem;
-  cursor: pointer;
-}
-
-.modal-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.modal-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-  border: 4px solid var(--primary-color);
-  padding: 5px;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.info-item label {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-bottom: 5px;
 }
 </style>

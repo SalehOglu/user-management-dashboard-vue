@@ -5,13 +5,13 @@ import Navbar from './components/NavbarCom.vue'
 <template>
   <div class="app-container">
     <Navbar v-if="$route.name !== 'login'" />
-    <transition name="fade" mode="out-in">
+    <main :class="{ 'with-navbar': $route.name !== 'login' }">
       <router-view v-slot="{ Component }">
-        <main :class="{ 'with-navbar': $route.name !== 'login' }">
+        <transition name="fade" mode="out-in">
           <component :is="Component" />
-        </main>
+        </transition>
       </router-view>
-    </transition>
+    </main>
   </div>
 </template>
 
