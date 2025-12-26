@@ -1,16 +1,19 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth.js'
 
 const isMenuOpen = ref(false)
+const auth = useAuthStore()
+
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
 const router = useRouter()
 const handleLogout = () => {
-  // Add your logout logic here (e.g., clearing tokens, user data, etc.)
-  router.push('/login')
+  auth.logout()
+  router.push('/')
 }
 </script>
 
@@ -25,7 +28,7 @@ const handleLogout = () => {
 
       <div class="nav-links" :class="{ open: isMenuOpen }">
         <div class="mobile-actions">
-          <span class="user-greeting">Hi, User</span>
+          <span class="user-greeting">Hi, {{ auth.user.name.split(' ')[0] }}</span>
         </div>
 
         <router-link to="./dashboard" class="nav-link" active-class="active">Dashboard</router-link>
@@ -34,7 +37,7 @@ const handleLogout = () => {
       </div>
 
       <div class="nav-actions desktop">
-        <span class="user-greeting">Hi, User</span>
+        <span class="user-greeting">Hi, {{ auth.user.name.split(' ')[0] }}</span>
         <button class="logout-btn" @click="handleLogout">Logout</button>
       </div>
     </div>
@@ -42,7 +45,6 @@ const handleLogout = () => {
 </template>
 
 <style scoped>
-/* ---------- NAVBAR BASE ---------- */
 .navbar {
   position: fixed;
   top: 15px;
@@ -56,7 +58,6 @@ const handleLogout = () => {
   border-radius: 12px;
 }
 
-/* ---------- NAV CONTENT ---------- */
 .nav-content {
   display: flex;
   width: 100%;

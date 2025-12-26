@@ -1,17 +1,53 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const router = useRouter()
+const auth = useAuthStore()
+
+const email = ref('q@quantum.io')
+const password = ref('qTask123#')
+
+const handleSubmit = async () => {
+  const success = await auth.login(email.value, password.value)
+  if (success) {
+    router.push('/dashboard')
+  }
+}
+</script>
 
 <template>
-  <div class="login-form">
+  <form @submit.prevent="handleSubmit" class="login-form">
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="email" class="glass-input" placeholder="name@company.com" />
+      <input
+        type="email"
+        v-model="email"
+        class="glass-input"
+        placeholder="name@company.com"
+        required
+      />
     </div>
     <div class="form-group">
       <label for="password"></label>
-      <input type="password" class="glass-input" placeholder="••••••••" />
+      <input
+        type="password"
+        v-model="password"
+        class="glass-input"
+        placeholder="••••••••"
+        required
+      />
     </div>
-    <button type="submit" class="glass-button login-btn">Sign In</button>
-  </div>
+
+    <div class="error-message" v-if="auth.error">
+      {{ auth.error }}
+    </div>
+
+    <button type="submit" class="glass-button login-btn" :disabled="auth.loading">
+      {{ auth.loading ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
 </template>
 
 <style scoped>
