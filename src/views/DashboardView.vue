@@ -1,6 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import UserModal from '../components/UserModal.vue'
+import { useUsersStore } from '../stores/users.js'
+
+const usersStore = useUsersStore()
+
+onMounted(() => {
+  if (!usersStore.users.length) {
+    usersStore.fetchUsers()
+  }
+})
+
 const isModalOpen = ref(false)
 
 const openUserModal = () => {
@@ -19,7 +29,9 @@ const closeUserModal = () => {
           <h1>Global User Management</h1>
           <p>Real-time directory of all active system users</p>
         </div>
-        <button class="glass-button refresh-btn">Refresh Users</button>
+        <button @click="usersStore.fetchUsers()" class="glass-button refresh-btn">
+          Refresh Users
+        </button>
       </header>
 
       <div class="controls-card glass-panel">
@@ -39,22 +51,25 @@ const closeUserModal = () => {
               <th>Profile</th>
               <th>Full Name</th>
               <th>Email</th>
-              <th>City</th>
-              <th>Country</th>
+              <th>Location</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="user-row">
+            <tr v-for="user in usersStore.pagginatedUsers" :key="user.login.uuid" class="user-row">
               <td>
-                <img src="../assets/avatar.png" alt="User Avatar" class="user-avatar" />
+                <img :src="user.picture.thumbnail" :alt="user.name.first" class="user-avatar" />
               </td>
               <td>
-                <div class="name-cell">Zairo</div>
+                <div class="name-cell">{{ user.name.first }} {{ user.name.last }}</div>
               </td>
-              <td>test@gmail.com</td>
-              <td>Cairo</td>
-              <td>Egypt</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <div class="country-cell">
+                  <span class="city">{{ user.location.city }}</span>
+                  <span class="country">{{ user.location.country }}</span>
+                </div>
+              </td>
               <td>
                 <button class="view-btn" @click="openUserModal">View Details</button>
               </td>
@@ -63,10 +78,25 @@ const closeUserModal = () => {
         </table>
       </div>
 
-      <div class="pagination">
-        <button class="page-btn" disabled>Previous</button>
-        <span class="page-info">Page 1 of 5</span>
-        <button class="page-btn">Next</button>
+      <!-- Pagination -->
+      <div v-if="usersStore.totalPages > 1" class="pagination">
+        <button
+          @click="usersStore.setCurrentPage(usersStore.currentPage - 1)"
+          :disabled="usersStore.currentPage === 1"
+          class="page-btn"
+        >
+          Previous
+        </button>
+        <span class="page-info"
+          >Page {{ usersStore.currentPage }} of {{ usersStore.totalPages }}</span
+        >
+        <button
+          @click="usersStore.setCurrentPage(usersStore.currentPage + 1)"
+          :disabled="usersStore.currentPage === usersStore.totalPages"
+          class="page-btn"
+        >
+          Next
+        </button>
       </div>
     </div>
 
@@ -172,16 +202,16 @@ const closeUserModal = () => {
   border: 2px solid var(--primary-color);
 }
 
-.name-cell {
-  display: flex;
-  flex-direction: column;
-}
-
 .first-name {
   font-weight: 600;
 }
 
-.username {
+.country-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.country {
   font-size: 0.8rem;
   color: var(--text-secondary);
 }
