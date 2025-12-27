@@ -15,9 +15,9 @@ export const mockLogin = async (email, password) => {
         name: 'AbdAllah Saleh',
         phone: '+1234567890',
         email: VALID_EMAIL,
-        jobTitle: 'Software Engineer',
+        jobTitle: 'Frontend Developer',
         yearsOfExperience: 5,
-        workingHours: '9 AM - 5 PM',
+        workingHours: '8 AM - 4 PM',
         address: '123 St, Cairo City, Egypt',
       },
     }

@@ -7,13 +7,10 @@ import LoginCard from '../components/LoginCard.vue'
     <div class="login-page">
       <div class="login-card glass-panel fade-in">
         <div class="login-header">
-          <h1>Welcome Back</h1>
+          <h1>Welcome</h1>
           <p>Enter your credentials to access the dashboard</p>
         </div>
         <LoginCard />
-        <div class="login-footer">
-          <p>Demo Account: <span>q@quantum.io</span> / <span>qTask123#</span></p>
-        </div>
       </div>
     </div>
   </main>
@@ -45,17 +42,5 @@ import LoginCard from '../components/LoginCard.vue'
 .login-header p {
   color: var(--text-secondary);
   margin-bottom: 30px;
-}
-
-.login-footer {
-  margin-top: 30px;
-  text-align: center;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-
-.login-footer span {
-  color: var(--primary-color);
-  font-weight: 600;
 }
 </style>

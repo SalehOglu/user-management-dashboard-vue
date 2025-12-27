@@ -200,6 +200,7 @@ const handleLogout = () => {
 
   .logout-btn.mob {
     display: block;
+    margin-top: 15px;
   }
   /* Show mobile actions */
   .mobile-actions {
