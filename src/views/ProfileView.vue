@@ -8,6 +8,10 @@ const loading = ref(false)
 const isEditing = ref(false)
 const message = ref({ text: '', type: '' })
 
+const clearMessage = () => {
+  message.value = { text: '', type: '' }
+}
+
 const formData = ref({
   name: auth.user.name || '',
   email: auth.user.email || '',
@@ -163,8 +167,13 @@ const cancelEdit = () => {
           </div>
         </form>
 
-        <div v-if="message.text" :class="['alert', message.type]">
-          {{ message.text }}
+        <div class="messageContainer">
+          <Transition name="fade">
+            <div v-if="message.text" :class="['alert', message.type]">
+              <span>{{ message.text }}</span>
+              <button class="close-btn" @click="clearMessage">&times;</button>
+            </div>
+          </Transition>
         </div>
       </div>
     </div>
@@ -288,11 +297,17 @@ const cancelEdit = () => {
   background: rgba(255, 255, 255, 0.05);
 }
 
+.messageContainer {
+  position: relative;
+  min-height: 25px;
+  margin-top: 20px;
+}
 .alert {
   padding: 12px;
   border-radius: 8px;
-  margin-block: 20px;
+  padding-right: 30px;
   font-size: 0.9rem;
+  position: relative;
 }
 
 .alert.success {
@@ -305,5 +320,19 @@ const cancelEdit = () => {
   background: rgba(255, 82, 82, 0.1);
   color: #ff5252;
   border: 1px solid #ff5252;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 25px;
+  cursor: pointer;
+}
+.close-btn:hover {
+  opacity: 0.8;
 }
 </style>
