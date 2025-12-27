@@ -27,6 +27,7 @@ const handleSubmit = async () => {
         class="glass-input"
         placeholder="name@company.com"
         required
+        autocomplete="username"
       />
     </div>
     <div class="form-group">
@@ -37,6 +38,7 @@ const handleSubmit = async () => {
         class="glass-input"
         placeholder="••••••••"
         required
+        autocomplete="password"
       />
     </div>
 

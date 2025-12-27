@@ -28,7 +28,9 @@ const handleLogout = () => {
 
       <div class="nav-links" :class="{ open: isMenuOpen }">
         <div class="mobile-actions">
-          <span class="user-greeting">Hi, {{ auth.user.name.split(' ')[0] }}</span>
+          <span class="user-greeting" v-if="auth.user"
+            >Hi, {{ auth.user?.name?.split(' ')[0] || 'Guest' }}</span
+          >
         </div>
 
         <router-link to="./dashboard" class="nav-link" active-class="active">Dashboard</router-link>
@@ -37,7 +39,7 @@ const handleLogout = () => {
       </div>
 
       <div class="nav-actions desktop">
-        <span class="user-greeting">Hi, {{ auth.user.name.split(' ')[0] }}</span>
+        <span class="user-greeting">Hi, {{ auth.user?.name?.split(' ')[0] || 'Guest' }}</span>
         <button class="logout-btn" @click="handleLogout">Logout</button>
       </div>
     </div>
