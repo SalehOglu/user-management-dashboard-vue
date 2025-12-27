@@ -6,8 +6,8 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const auth = useAuthStore()
 
-const email = ref('q@quantum.io')
-const password = ref('qTask123#')
+const email = ref('')
+const password = ref('')
 
 const handleSubmit = async () => {
   const success = await auth.login(email.value, password.value)
